@@ -189,7 +189,5 @@ function printIDCard() {
     win.print();
 }
 function showQR() {
-  document.getElementById("qrModal").style.display = "block";
-}
-
+    document.getElementById('qrModal').style.display = "block";
 }
