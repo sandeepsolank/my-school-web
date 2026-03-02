@@ -191,3 +191,4 @@ function printIDCard() {
 function showQR() {
     document.getElementById('qrModal').style.display = "block";
 }
+
