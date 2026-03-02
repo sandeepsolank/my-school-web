@@ -188,3 +188,8 @@ function printIDCard() {
     win.document.close();
     win.print();
 }
+function showQR() {
+  document.getElementById("qrModal").style.display = "block";
+}
+
+}
