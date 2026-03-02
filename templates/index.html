@@ -225,6 +225,20 @@
         </footer>
         
         <script src="{{ url_for('static', filename='script.js') }}"></script>
+         <div id="qrModal"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;">
+            <div
+                style="position:relative; top:50%; left:50%; transform:translate(-50%, -50%); background:white; max-width:300px; padding:20px; border-radius:15px; text-align:center; box-shadow: 0 5px 20px rgba(0,0,0,0.5);">
+                <h3 style="color:#003366; margin-bottom:15px;">Share Website</h3>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://govt-hss-alot.onrender.com"
+                    alt="School QR" style="width:200px; height:200px; border: 1px solid #eee; padding: 5px;">
+                <p style="font-size:14px; color:#333; margin-top:15px; font-weight:bold;">Govt. H.S.S. Alot Jageer</p>
+                <p style="font-size:11px; color:gray;">Scan this to open in mobile</p>
+                <button onclick="document.getElementById('qrModal').style.display='none'" class="submit-btn"
+                    style="background:red; margin-top:15px; width:100%;">Close</button>
+            </div>
+        </div>   
    </body>
         
+
 </html>
