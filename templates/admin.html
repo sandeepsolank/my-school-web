@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard - Govt. H.S.S. Alot Jageer</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            /* Distinct color for the admin header */
+            .admin-header {
+                background-color: #d32f2f;
+            }
+
+            .back-link {
+                color: #ffcc00;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 16px;
+                margin-top: 10px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <header class="admin-header">
+            <h1>Principal's Dashboard</h1>
+            <p>List of Online Admission Inquiries</p>
+            <a href="/logout" class="back-link"
+                style="background-color: white; color: #d32f2f; padding: 5px 15px; border-radius: 4px;">Logout</a>
+        </header>
+
+        <div class="container">
+            <h2 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px;">Total Received Inquiries
+            </h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        <th>Mobile Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student[0] }}</td>
+                        <td>{{ student[1] }}</td>
+                        <td>{{ student[2] }}</td>
+                        <td>{{ student[3] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No admission inquiries have been submitted yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </body>
+
+</html>

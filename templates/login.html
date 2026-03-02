@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Login - Govt. H.S.S. Alot Jageer</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            .login-container {
+                max-width: 400px;
+                margin: 100px auto;
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                text-align: center;
+            }
+
+            .error-msg {
+                color: red;
+                font-weight: bold;
+                margin-bottom: 15px;
+            }
+        </style>
+    </head>
+
+    <body style="background-color: #003366;">
+        <div class="login-container">
+            <h2 style="color: #003366;">Principal Login</h2>
+            <p>Please enter the password to view student data.</p>
+
+            {% if error %}
+            <div class="error-msg">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Enter Password" required
+                        style="text-align: center; font-size: 16px;">
+                </div>
+                <button type="submit" class="submit-btn" style="width: 100%;">Login to Dashboard</button>
+            </form>
+
+            <br>
+            <a href="/" style="color: #666; text-decoration: none; font-size: 14px;">← Back to Home Website</a>
+        </div>
+
+    </body>
+
+</html>
