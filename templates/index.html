@@ -217,9 +217,13 @@
         <footer>
         
         <script src="{{ url_for('static', filename='script.js') }}"></script>
-        <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+                <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
     <button onclick="showQR()" style="background: #003366; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 24px;" title="Scan to Share">
-        📱
+    </button>
+</div>
+
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <button onclick="showQR()" style="background: #003366; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 24px;" title="Scan to Share">
     </button>
 </div>
 
@@ -230,10 +234,9 @@
         <p style="margin-top:15px; font-weight:bold;">Govt. H.S.S. Alot Jageer</p>
         <button onclick="document.getElementById('qrModal').style.display='none'" style="background:red; color:white; border:none; padding:10px; width:100%; border-radius:5px; margin-top:10px; cursor:pointer;">Close</button>
     </div>
-</div> 
-   </body>
-        
-
+</div>   
+        </body>
 </html>
+
 
 
