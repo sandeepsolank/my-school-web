@@ -6,63 +6,71 @@
     <title>Admission Form - Govt HSS Alot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body { background: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
-        .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        body { background: #f4f7f6; font-family: 'Arial', sans-serif; padding: 20px; }
+        .form-container { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         
-        h2 { text-align: center; color: #003366; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
-        /* Photo Box Styling - Fixed to Top Right */
-        .header-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .photo-upload-box { text-align: center; border: 2px dashed #003366; padding: 8px; border-radius: 10px; width: 130px; background: #fafafa; cursor: pointer; transition: 0.3s; }
-        .photo-upload-box:hover { background: #f0f4f8; }
-        #photoPreview { width: 120px; height: 150px; object-fit: cover; border-radius: 5px; display: block; margin-bottom: 5px; }
-        
-        .section-title { background: #e9ecef; padding: 10px; margin: 25px 0 15px 0; color: #003366; border-left: 5px solid #003366; font-weight: bold; width: 100%; box-sizing: border-box; }
-        
-        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-        .input-group { display: flex; flex-direction: column; }
-        
-        label { font-weight: bold; color: #444; font-size: 14px; margin-bottom: 5px; }
-        input, select, textarea { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: #003366; box-shadow: 0 0 5px rgba(0,51,102,0.2); }
-        
-        .submit-btn { width: 100%; background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; transition: 0.3s; }
-        .submit-btn:hover { background: #218838; transform: translateY(-2px); }
+        h2 { text-align: center; color: #003366; margin-bottom: 25px; }
 
-        @media (max-width: 600px) { .grid-input { grid-template-columns: 1fr; } .header-section { flex-direction: column-reverse; align-items: center; } .photo-upload-box { margin-bottom: 20px; } }
+        /* 🎯 फोटो बॉक्स को सेंटर में लाने की स्टाइल */
+        .photo-center-wrapper {
+            display: flex;
+            justify-content: center; /* बीच में लाता है */
+            margin-bottom: 30px;
+        }
+        .photo-box {
+            text-align: center;
+            border: 2px dashed #003366;
+            padding: 10px;
+            border-radius: 10px;
+            width: 140px;
+            background: #fafafa;
+            cursor: pointer;
+        }
+        #photoPreview {
+            width: 120px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+        .section-title { background: #f0f4f8; padding: 10px; margin: 20px 0; color: #003366; border-left: 5px solid #003366; font-weight: bold; }
+        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        label { font-weight: bold; font-size: 14px; color: #333; }
+        .submit-btn { width: 100%; background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        
+        @media (max-width: 600px) { .grid-input { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <div class="form-container">
+        <h2>New Admission Form 2026-27</h2>
+
         <form action="/payment-gate" method="POST" enctype="multipart/form-data">
             
-            <div class="header-section">
-                <div style="flex: 1;">
-                    <h2>New Admission Form 2026-27</h2>
-                    <p style="color: #666;">कृपया सभी जानकारी सही-सही भरें।</p>
-                </div>
-
-                <div class="photo-upload-box" onclick="document.getElementById('photoUpload').click();">
+            <div class="photo-center-wrapper">
+                <div class="photo-box" onclick="document.getElementById('photoUpload').click();">
                     <img id="photoPreview" src="https://via.placeholder.com/120x150?text=Upload+Photo" alt="Student Photo">
-                    <span style="font-size: 11px; color: #003366; font-weight: bold; display: block;">STUDENT PHOTO</span>
+                    <span style="font-size: 11px; color: #003366; font-weight: bold;">STUDENT PHOTO</span>
                     <input type="file" id="photoUpload" name="studentPhoto" accept="image/*" style="display: none;" onchange="previewImage(this)">
                 </div>
             </div>
 
             <div class="section-title">Personal Information</div>
             <div class="grid-input">
-                <div class="input-group"><label>First Name</label><input type="text" name="fname" required placeholder="First Name"></div>
-                <div class="input-group"><label>Last Name</label><input type="text" name="lname" required placeholder="Last Name"></div>
+                <div><label>First Name</label><input type="text" name="fname" required></div>
+                <div><label>Last Name</label><input type="text" name="lname" required></div>
             </div>
             <div class="grid-input">
-                <div class="input-group"><label>Father's Name</label><input type="text" name="father" required placeholder="Father's Name"></div>
-                <div class="input-group"><label>Mother's Name</label><input type="text" name="mother" required placeholder="Mother's Name"></div>
+                <div><label>Father's Name</label><input type="text" name="father" required></div>
+                <div><label>Mother's Name</label><input type="text" name="mother" required></div>
             </div>
             <div class="grid-input">
-                <div class="input-group"><label>Date of Birth</label><input type="date" name="dob" required></div>
-                <div class="input-group">
-                    <label>Admission for Class</label>
+                <div><label>Date of Birth</label><input type="date" name="dob" required></div>
+                <div><label>Class</label>
                     <select name="class" required>
                         <option value="">Select Class</option>
                         <option>9th</option><option>10th</option><option>11th</option><option>12th</option>
@@ -70,19 +78,14 @@
                 </div>
             </div>
 
-            <div class="section-title">Identity & Contact Details</div>
+            <div class="section-title">Identity & Contact</div>
             <div class="grid-input">
-                <div class="input-group"><label>SSSM ID</label><input type="number" name="sssm" required placeholder="9 Digit ID"></div>
-                <div class="input-group"><label>Aadhar Card Number</label><input type="number" name="aadhar" required placeholder="12 Digit Number"></div>
+                <div><label>SSSM ID</label><input type="number" name="sssm" required></div>
+                <div><label>Aadhar Number</label><input type="number" name="aadhar" required></div>
             </div>
             <div class="grid-input">
-                <div class="input-group"><label>Mobile Number</label><input type="tel" name="mobile" required placeholder="Mobile Number"></div>
-                <div class="input-group"><label>Email ID</label><input type="email" name="email" placeholder="Optional"></div>
-            </div>
-            
-            <div class="input-group" style="margin-top: 15px;">
-                <label>Full Address</label>
-                <textarea name="address" rows="3" required placeholder="Enter your full village/town address..."></textarea>
+                <div><label>Mobile Number</label><input type="tel" name="mobile" required></div>
+                <div><label>Email</label><input type="email" name="email"></div>
             </div>
 
             <button type="submit" class="submit-btn">Save & Proceed to Payment</button>
@@ -100,6 +103,5 @@
             }
         }
     </script>
-
 </body>
 </html>
