@@ -7,55 +7,64 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body { background: #f4f7f6; font-family: 'Arial', sans-serif; padding: 15px; margin: 0; }
-        .form-container { max-width: 800px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .form-container { 
+            max-width: 750px; 
+            margin: 20px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            position: relative; 
+        }
         
-        /* 🛠️ Header Flexbox: यह टाइटल और फोटो को एक लाइन में रखेगा बिना लेआउट बिगाड़े */
-        .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 2px solid #003366;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+        /* 🔴 CENTERED TITLE AREA */
+        .form-header-center {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 5px;
+        }
+        .form-header-center h2 { 
+            color: #003366; 
+            margin: 0; 
+            font-size: 24px;
+        }
+        .form-header-center p { 
+            color: #666; 
+            margin: 5px 0 0 0; 
+            font-size: 14px; 
         }
 
-        .title-area h2 { color: #003366; margin: 0; font-size: 24px; }
-        .title-area p { color: #666; margin: 5px 0 0 0; font-size: 14px; }
-
-        /* 📸 Passport Size Photo (Right Side) */
-        .photo-upload-wrapper {
-            flex-shrink: 0; /* फोटो को दबने से रोकता है */
+        /* 🟡 SMALL PHOTO BOX (TOP RIGHT) */
+        .photo-upload-right {
+            position: absolute;
+            top: 20px;
+            right: 25px;
             text-align: center;
         }
-
         .photo-box {
-            width: 100px;  /* परफेक्ट पासपोर्ट साइज चौड़ाई */
-            height: 125px; /* परफेक्ट पासपोर्ट साइज लंबाई */
-            border: 2px dashed #003366;
-            background: #f9f9f9;
+            width: 85px;  /* चौड़ाई और कम कर दी (Small Passport Size) */
+            height: 110px; /* हाइट भी उसी अनुपात में कम की */
+            border: 1.5px solid #003366;
+            background: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             overflow: hidden;
-            position: relative;
         }
-
         #photoPreview { width: 100%; height: 100%; object-fit: cover; }
-        .upload-hint { font-size: 9px; font-weight: bold; color: #003366; margin-top: 5px; display: block; }
+        .upload-hint { font-size: 8px; font-weight: bold; color: #003366; margin-top: 3px; display: block; }
 
         /* Form Content */
-        .section-title { background: #f0f4f8; padding: 10px; margin: 20px 0 10px 0; color: #003366; border-left: 5px solid #003366; font-weight: bold; font-size: 15px; }
-        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
-        label { font-size: 13px; font-weight: bold; color: #444; margin-bottom: 5px; display: block; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .section-title { background: #003366; padding: 8px 12px; margin: 20px 0 15px 0; color: white; font-weight: bold; font-size: 14px; border-radius: 3px; }
+        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        label { font-size: 12.5px; font-weight: bold; color: #333; margin-bottom: 4px; display: block; }
+        input, select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         
-        .submit-btn { width: 100%; background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .submit-btn { width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 20px; }
 
-        /* Mobile Responsive */
-        @media (max-width: 500px) {
-            .form-header { flex-direction: column-reverse; align-items: center; text-align: center; }
-            .title-area { margin-top: 15px; }
+        @media (max-width: 600px) {
+            .photo-upload-right { position: static; margin: 0 auto 15px auto; }
             .grid-input { grid-template-columns: 1fr; }
         }
     </style>
@@ -65,19 +74,17 @@
     <div class="form-container">
         <form action="/payment-gate" method="POST" enctype="multipart/form-data">
             
-            <div class="form-header">
-                <div class="title-area">
-                    <h2>Admission Form</h2>
-                    <p>Govt HSS Alot | Session 2026-27</p>
+            <div class="photo-upload-right">
+                <div class="photo-box" onclick="document.getElementById('photoUpload').click();">
+                    <img id="photoPreview" src="https://via.placeholder.com/85x110?text=Photo" alt="Student Photo">
                 </div>
+                <span class="upload-hint">UPLOAD PHOTO</span>
+                <input type="file" id="photoUpload" name="studentPhoto" accept="image/*" style="display: none;" onchange="previewImage(this)">
+            </div>
 
-                <div class="photo-upload-wrapper">
-                    <div class="photo-box" onclick="document.getElementById('photoUpload').click();">
-                        <img id="photoPreview" src="https://via.placeholder.com/100x125?text=Photo" alt="Student Photo">
-                    </div>
-                    <span class="upload-hint">Upload Photo</span>
-                    <input type="file" id="photoUpload" name="studentPhoto" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                </div>
+            <div class="form-header-center">
+                <h2>New Admission Form</h2>
+                <p>Govt HSS Alot | 2026-27</p>
             </div>
 
             <div class="section-title">Personal Details</div>
@@ -103,10 +110,6 @@
             <div class="grid-input">
                 <div><label>SSSM ID</label><input type="number" name="sssm" required></div>
                 <div><label>Aadhar Number</label><input type="number" name="aadhar" required></div>
-            </div>
-            <div style="margin-top: 10px;">
-                <label>Mobile Number</label>
-                <input type="tel" name="mobile" required>
             </div>
 
             <button type="submit" class="submit-btn">Save & Proceed</button>
