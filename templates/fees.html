@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fee Payment - Govt HSS Alot</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            .payment-box {
+                max-width: 500px;
+                margin: 40px auto;
+                background: white;
+                padding: 25px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border-top: 8px solid #28a745;
+            }
+
+            .fee-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .total-amount {
+                font-size: 22px;
+                font-weight: bold;
+                color: #28a745;
+                margin-top: 15px;
+            }
+
+            .qr-section {
+                background: #f9f9f9;
+                padding: 20px;
+                border-radius: 10px;
+                margin-top: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body style="background: #f4f7f6;">
+
+        <div class="payment-box">
+            <h2 style="text-align: center; color: #003366; margin-bottom: 5px;">Admission Fee Detail</h2>
+            <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 25px;">Session 2026-27</p>
+
+            <div class="fee-row"><span>Admission Fee:</span> <span>₹ 500</span></div>
+            <div class="fee-row"><span>Tuition Fee:</span> <span>₹ 1200</span></div>
+            <div class="fee-row"><span>Sports & Library:</span> <span>₹ 300</span></div>
+            <div class="fee-row" style="border-bottom: none;">
+                <span class="total-amount">Total Payable:</span>
+                <span class="total-amount">₹ 2000</span>
+            </div>
+
+            <div class="qr-section">
+                <p style="font-weight: bold; margin-bottom: 15px;">Scan this QR to Pay via PhonePe/GPay</p>
+
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=YOUR_UPI_ID@okicici&pn=GovtHSSAlot&am=2000&cu=INR"
+                    alt="Payment QR" style="width: 200px; border: 2px solid #ddd; padding: 5px; background: white;">
+
+                <p style="font-size: 13px; color: #d9534f; margin-top: 15px; font-weight: bold;">
+                    ⚠️ भुगतान के बाद "Transaction ID" का स्क्रीनशॉट स्कूल में दिखाना अनिवार्य है।
+                </p>
+            </div>
+
+            <button onclick="window.print()" class="submit-btn"
+                style="width: 100%; background: #003366; margin-top: 20px;">
+                🖨️ Print Receipt
+            </button>
+
+            <p style="text-align: center; margin-top: 15px;">
+                <a href="/" style="color: #666; font-size: 14px; text-decoration: none;">← Back to Home</a>
+            </p>
+        </div>
+
+    </body>
+
+</html>
