@@ -1,1 +1,97 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admission Form - Govt HSS Alot</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            .form-container {
+                max-width: 700px;
+                margin: 30px auto;
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .grid-input {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+            }
+
+            label {
+                font-weight: bold;
+                color: #003366;
+                font-size: 14px;
+            }
+
+            .section-title {
+                background: #f0f4f8;
+                padding: 10px;
+                margin: 20px 0 10px 0;
+                color: #003366;
+                border-left: 5px solid #003366;
+            }
+        </style>
+    </head>
+
+    <body style="background: #f4f7f6;">
+        <div class="form-container">
+            <h2 style="text-align: center; color: #003366;">New Admission Form 2026-27</h2>
+            <form action="/payment-gate">
+                <div class="section-title">Personal Information</div>
+                <div class="grid-input">
+                    <div><label>First Name</label><input type="text" required></div>
+                    <div><label>Last Name</label><input type="text" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Father's Name</label><input type="text" required></div>
+                    <div><label>Mother's Name</label><input type="text" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Date of Birth</label><input type="date" required></div>
+                    <div><label>Admission for Class</label>
+                        <select required>
+                            <option value="">Select Class</option>
+                            <option>9th</option>
+                            <option>10th</option>
+                            <option>11th</option>
+                            <option>12th</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Identity & Contact</div>
+                <div class="grid-input">
+                    <div><label>SSSM ID</label><input type="number" required></div>
+                    <div><label>Aadhar Card Number</label><input type="number" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Mobile Number</label><input type="tel" required></div>
+                    <div><label>Email ID</label><input type="email"></div>
+                </div>
+                <div><label>Full Address</label><textarea rows="3" required></textarea></div>
+
+                <button type="submit" class="submit-btn"
+                    style="width: 100%; margin-top: 30px; background: #28a745; height: 50px; font-size: 18px;">
+                    Save & Proceed to Payment
+                </button>
+            </form>
+        </div>
+    </body>
+
+</html>
