@@ -114,6 +114,13 @@ def logout():
     session.pop('logged_in', None) # सेशन डिलीट करें
     return redirect(url_for('home')) # होमपेज पर भेजें
 
+@app.route('/admission')
+def admission():
+    return render_template('admission.html')
+
+@app.route('/payment-gate')
+def payment_gate():
+    return render_template('fees.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
