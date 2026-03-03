@@ -1,120 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Form - Govt HSS Alot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        body { background: #f4f7f6; font-family: 'Arial', sans-serif; padding: 20px; }
-        .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); position: relative; }
-        
-        /* 🛠️ Header Section जो टाइटल और फोटो को एक लाइन में रखेगा */
-        .form-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 30px; 
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-        }
 
-        .form-title h2 { color: #003366; margin: 0; }
-        .form-title p { color: #666; margin: 5px 0 0 0; font-size: 14px; }
-
-        /* 📸 PHOTO BOX (Fixed to Top Right) */
-        .photo-box {
-            text-align: center;
-            border: 2px dashed #003366;
-            padding: 5px;
-            border-radius: 10px;
-            width: 120px; /* फिक्स्ड चौड़ाई ताकि पूरी जगह न ले */
-            background: #fafafa;
-            cursor: pointer;
-        }
-        #photoPreview {
-            width: 110px;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 5px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .section-title { background: #f0f4f8; padding: 10px; margin: 20px 0; color: #003366; border-left: 5px solid #003366; font-weight: bold; clear: both; }
-        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        label { font-weight: bold; font-size: 14px; color: #333; }
-        .submit-btn { width: 100%; background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        
-        @media (max-width: 600px) { 
-            .form-header { flex-direction: column-reverse; text-align: center; }
-            .grid-input { grid-template-columns: 1fr; }
-            .photo-box { margin-bottom: 15px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="form-container">
-        <form action="/payment-gate" method="POST" enctype="multipart/form-data">
-            
-            <div class="form-header">
-                <div class="form-title">
-                    <h2>Admission Form</h2>
-                    <p>Session 2026-27 | Govt HSS Alot</p>
-                </div>
-
-                <div class="photo-box" onclick="document.getElementById('photoUpload').click();">
-                    <img id="photoPreview" src="https://via.placeholder.com/110x140?text=Upload+Photo" alt="Student Photo">
-                    <span style="font-size: 10px; color: #003366; font-weight: bold;">STUDENT PHOTO</span>
-                    <input type="file" id="photoUpload" name="studentPhoto" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                </div>
-            </div>
-
-            <div class="section-title">Personal Information</div>
-            <div class="grid-input">
-                <div><label>First Name</label><input type="text" name="fname" required></div>
-                <div><label>Last Name</label><input type="text" name="lname" required></div>
-            </div>
-            <div class="grid-input">
-                <div><label>Father's Name</label><input type="text" name="father" required></div>
-                <div><label>Mother's Name</label><input type="text" name="mother" required></div>
-            </div>
-            <div class="grid-input">
-                <div><label>Date of Birth</label><input type="date" name="dob" required></div>
-                <div><label>Class</label>
-                    <select name="class" required>
-                        <option value="">Select Class</option>
-                        <option>9th</option><option>10th</option><option>11th</option><option>12th</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="section-title">Identity & Contact</div>
-            <div class="grid-input">
-                <div><label>SSSM ID</label><input type="number" name="sssm" required></div>
-                <div><label>Aadhar Number</label><input type="number" name="aadhar" required></div>
-            </div>
-            <div class="grid-input">
-                <div><label>Mobile Number</label><input type="tel" name="mobile" required></div>
-                <div><label>Email</label><input type="email" name="email"></div>
-            </div>
-
-            <button type="submit" class="submit-btn">Save & Proceed to Payment</button>
-        </form>
-    </div>
-
-    <script>
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('photoPreview').src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admission Form - Govt HSS Alot</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            body {
+                background: #f4f7f6;
+                font-family: 'Arial', sans-serif;
+                padding: 15px;
             }
-        }
-    </script>
-</body>
+
+            .form-container {
+                max-width: 750px;
+                margin: 0 auto;
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                position: relative;
+                /* फोटो को पोजीशन देने के लिए */
+            }
+
+            h2 {
+                color: #003366;
+                margin-top: 0;
+                padding-right: 120px;
+            }
+
+            /* टाइटल को फोटो से टकराने से बचाने के लिए */
+
+            /* 📸 PASSPORT SIZE PHOTO BOX (TOP RIGHT) */
+            .passport-photo-section {
+                position: absolute;
+                top: 25px;
+                right: 25px;
+                width: 110px;
+                /* फिक्स्ड पासपोर्ट साइज चौड़ाई */
+                text-align: center;
+            }
+
+            .photo-box {
+                border: 1px solid #003366;
+                padding: 2px;
+                background: #fff;
+                cursor: pointer;
+                height: 140px;
+                /* पासपोर्ट साइज लंबाई */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            #photoPreview {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .photo-label {
+                font-size: 9px;
+                font-weight: bold;
+                color: #003366;
+                margin-top: 5px;
+                text-transform: uppercase;
+            }
+
+            /* Form Styling */
+            .section-title {
+                background: #eef2f7;
+                padding: 8px 12px;
+                margin: 25px 0 15px 0;
+                color: #003366;
+                border-left: 4px solid #003366;
+                font-weight: bold;
+                font-size: 15px;
+            }
+
+            .grid-input {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+            label {
+                font-weight: bold;
+                font-size: 13px;
+                color: #444;
+                margin-bottom: 4px;
+                display: block;
+            }
+
+            .submit-btn {
+                width: 100%;
+                background: #1a73e8;
+                color: white;
+                padding: 12px;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+
+            @media (max-width: 600px) {
+                .passport-photo-section {
+                    position: relative;
+                    top: 0;
+                    right: 0;
+                    margin: 0 auto 20px auto;
+                }
+
+                h2 {
+                    padding-right: 0;
+                    text-align: center;
+                }
+
+                .grid-input {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="form-container">
+            <h2>New Admission Form <br><span style="font-size: 14px; color: #666;">Session 2026-27 | Govt HSS
+                    Alot</span></h2>
+
+            <form action="/payment-gate" method="POST" enctype="multipart/form-data">
+
+                <div class="passport-photo-section">
+                    <div class="photo-box" onclick="document.getElementById('photoUpload').click();">
+                        <img id="photoPreview" src="https://via.placeholder.com/110x140?text=Passport+Photo"
+                            alt="Student Photo">
+                    </div>
+                    <div class="photo-label">Click to Upload</div>
+                    <input type="file" id="photoUpload" name="studentPhoto" accept="image/*" style="display: none;"
+                        onchange="previewImage(this)">
+                </div>
+
+                <div class="section-title">Personal Information</div>
+                <div class="grid-input">
+                    <div><label>First Name</label><input type="text" name="fname" required></div>
+                    <div><label>Last Name</label><input type="text" name="lname" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Father's Name</label><input type="text" name="father" required></div>
+                    <div><label>Mother's Name</label><input type="text" name="mother" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Date of Birth</label><input type="date" name="dob" required></div>
+                    <div><label>Class for Admission</label>
+                        <select name="class" required>
+                            <option value="">--Select--</option>
+                            <option>9th</option>
+                            <option>10th</option>
+                            <option>11th</option>
+                            <option>12th</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Identity & Contact Details</div>
+                <div class="grid-input">
+                    <div><label>SSSM ID</label><input type="number" name="sssm" required></div>
+                    <div><label>Aadhar Number</label><input type="number" name="aadhar" required></div>
+                </div>
+                <div class="grid-input">
+                    <div><label>Mobile Number</label><input type="tel" name="mobile" required></div>
+                    <div><label>Email ID</label><input type="email" name="email"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Save & Proceed to Payment</button>
+            </form>
+        </div>
+
+        <script>
+            function previewImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('photoPreview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+    </body>
+
 </html>
