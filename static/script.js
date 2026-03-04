@@ -1,6 +1,9 @@
 // --- 1. Footer Year ---
-const year element = document.getElementById("currentYear");
-if (yearElement) yearElement.textContent = new Date().getFullYear();
+// स्पेस हटा दिया गया है, अब यह सही वेरिएबल है
+const yearElement = document.getElementById("currentYear");
+if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+}
 
 // --- 2. Google Apps Script URL ---
 // अपना सबसे नया DEPLOY URL यहाँ सिंगल कोट्स के अंदर डालें
@@ -202,3 +205,4 @@ function showQR() {
 
 // पेज लोड होते ही स्टाफ की लिस्ट लोड करें
 window.addEventListener('DOMContentLoaded', loadStaff);
+
