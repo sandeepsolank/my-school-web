@@ -1,4 +1,4 @@
-// --- 1. Footer Year Fix (बिना किसी एरर के) ---
+// --- 1. Footer Year Fix ---
 document.addEventListener('DOMContentLoaded', () => {
     const yearElement = document.getElementById("currentYear");
     if (yearElement) {
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- 2. आपका Google Apps Script URL ---
-const scriptURL = 'https://script.google.com/macros/s/AKfycbynehVNcKWLUk2oOZyg_XHfBTVftRrz2AcjdQZJPcKKdpNJHPKaU6Iopq7VMihmn68S/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbx_3Q2q70bDl2XyGS-b15-bmAbNepCcjqHBZ-gfXAUje5NpJx2Uf3FHUeNH7BD-CEKk/exec';
 
 // --- 3. Staff Data Load करने का फंक्शन ---
 async function loadStaff() {
@@ -15,14 +15,18 @@ async function loadStaff() {
     if (!container) return; 
 
     try {
-        // हमने यहाँ URL के साथ रैंडम नंबर जोड़ा है ताकि पुराना डेटा न दिखे (Cache bypass)
-        const response = await fetch(scriptURL + '?nocache=' + new Date().getTime());
+        // --- CORS FIX वाला नया FETCH कोड यहाँ है ---
+        const response = await fetch(scriptURL, {
+            method: 'GET',
+            mode: 'cors', 
+            redirect: 'follow'
+        });
         
         if (!response.ok) throw new Error('Network response was not ok');
         
         const staffData = await response.json();
         
-        container.innerHTML = ""; 
+        container.innerHTML = ""; // 'Loading' मैसेज हटाएँ
 
         if (!staffData || staffData.length === 0) {
             container.innerHTML = "<p>अभी कोई स्टाफ डेटा उपलब्ध नहीं है।</p>";
@@ -32,6 +36,8 @@ async function loadStaff() {
         staffData.forEach(m => {
             const card = document.createElement('div');
             card.className = 'staff-card';
+            
+            // फोटो चेक करना
             const finalPhoto = m.photo || m.photo_url || 'https://via.placeholder.com/150';
             
             card.onclick = () => showStaffDetails(m, finalPhoto);
@@ -45,11 +51,11 @@ async function loadStaff() {
         });
     } catch (e) {
         console.error("Staff loading error:", e);
-        // अगर एरर आए तो यहाँ क्लिक करके दोबारा लोड करने का बटन दिखेगा
         container.innerHTML = `<p>डेटा लोड नहीं हो पाया। <br> 
-        <button onclick="loadStaff()" style="padding:5px 10px; cursor:pointer;">दोबारा कोशिश करें</button></p>`;
+        <button onclick="loadStaff()" style="margin-top:10px; padding:5px 10px; cursor:pointer;">दोबारा कोशिश करें</button></p>`;
     }
 }
+
 // --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
 function showStaffDetails(m, photo) {
     const modal = document.getElementById('staffModal');
@@ -62,8 +68,10 @@ function showStaffDetails(m, photo) {
     document.getElementById('mQual').innerText = m.qual || "जानकारी उपलब्ध नहीं";
     document.getElementById('mSub').innerText = m.sub || "जानकारी उपलब्ध नहीं";
     document.getElementById('mMobile').innerText = m.mobile || "N/A";
-    document.getElementById('mEmail').innerText = m.email || "N/A";
-    document.getElementById('mBio').innerText = m.bio || "विद्यालय परिवार के सम्मानित सदस्य।";
+    
+    // अगर HTML में mEmail और mBio वाली id हैं तो ये काम करेंगी
+    if(document.getElementById('mEmail')) document.getElementById('mEmail').innerText = m.email || "N/A";
+    if(document.getElementById('mBio')) document.getElementById('mBio').innerText = m.bio || "विद्यालय परिवार के सम्मानित सदस्य।";
     
     modal.style.display = "block";
 }
@@ -82,6 +90,5 @@ window.onclick = function(event) {
     }
 }
 
-// --- 6. पेज लोड होते ही डेटा लोड करना शुरू करें ---
+// --- 6. पेज लोड होते ही लोड शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
-
