@@ -1,8 +1,10 @@
 // --- 1. Footer Year ---
-document.getElementById("currentYear").textContent = new Date().getFullYear();
+const year element = document.getElementById("currentYear");
+if (yearElement) yearElement.textContent = new Date().getFullYear();
 
-// --- 2. Google Apps Script URL (अपना नया URL यहाँ डालें) ---
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxnMYVP8hGzGFD8UFOnsFy1bbVLat2IrJVkaMZslfzdmwV3IQTuwiXv7yAyr4YT0gLM/exec';
+// --- 2. Google Apps Script URL ---
+// अपना सबसे नया DEPLOY URL यहाँ सिंगल कोट्स के अंदर डालें
+const scriptURL = 'https://script.google.com/macros/s/AKfycbynehVNcKWLUk2oOZyg_XHfBTVftRrz2AcjdQZJPcKKdpNJHPKaU6Iopq7VMihmn68S/exec';
 
 // --- 3. Admission Form Submit Handling ---
 if (document.getElementById("admissionForm")) {
@@ -13,31 +15,31 @@ if (document.getElementById("admissionForm")) {
         let mobile = document.getElementById("mobileNumber").value;
 
         let formData = new FormData();
-        formData.append('sheet_type', 'Sheet1'); // Admission Sheet
+        formData.append('sheet_type', 'Sheet1'); 
         formData.append('fname', name);
         formData.append('class', className);
         formData.append('mobile', mobile);
 
         fetch(scriptURL, { method: "POST", body: formData })
             .then(() => {
-                alert("Thank you, " + name + "! Your inquiry has been saved.");
+                alert("बधाई हो " + name + "! आपका एडमिशन इंक्वायरी फॉर्म जमा हो गया है।");
                 document.getElementById("admissionForm").reset();
             })
             .catch((error) => console.error("Error:", error));
     });
 }
 
-// --- 4. Staff Admin Form (अगर Admin Page पर हैं) ---
+// --- 4. Staff Admin Form (एडमिन पेज के लिए) ---
 if (document.getElementById("staffForm")) {
     document.getElementById("staffForm").addEventListener("submit", function (e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "Saving Data...";
+        btn.innerText = "सेव हो रहा है...";
         btn.disabled = true;
 
         fetch(scriptURL, { method: 'POST', body: new FormData(this) })
             .then(response => {
-                alert("Staff data saved successfully!");
+                alert("स्टाफ की जानकारी सफलतापूर्वक सुरक्षित कर ली गई है!");
                 this.reset();
                 btn.innerText = "Save Staff Data";
                 btn.disabled = false;
@@ -49,44 +51,59 @@ if (document.getElementById("staffForm")) {
     });
 }
 
-// --- 5. Staff Display Logic (Home Page पर स्टाफ लोड करने के लिए) ---
+// --- 5. Staff Display Logic (Home Page पर डेटा दिखाना) ---
 async function loadStaff() {
     const container = document.getElementById('staff-list');
-    if (!container) return; // अगर पेज पर स्टाफ लिस्ट नहीं है तो रुक जाएं
+    if (!container) return; 
 
     try {
+        // गूगल शीट से डेटा मांगना
         const response = await fetch(scriptURL);
         const staffData = await response.json();
+        
+        if (staffData.length === 0) {
+            container.innerHTML = "<p>कोई स्टाफ डेटा नहीं मिला।</p>";
+            return;
+        }
+
         container.innerHTML = ""; 
 
         staffData.forEach(m => {
             const card = document.createElement('div');
             card.className = 'staff-card';
-            card.onclick = () => showStaffDetails(m.name, m.post, m.exp, m.qual, m.sub, m.mobile, m.email, m.bio);
+            // कार्ड पर क्लिक करने पर डिटेल्स खुलेगी
+            card.onclick = () => showStaffDetails(m.name, m.post, m.exp, m.qual, m.sub, m.mobile, m.email, m.bio, m.photo);
             card.innerHTML = `
-                <img src="${m.photo || 'https://via.placeholder.com/150'}" alt="${m.name}">
+                <img src="${m.photo || 'https://via.placeholder.com/150'}" alt="${m.name}" onerror="this.src='https://via.placeholder.com/150'">
                 <h4>${m.name}</h4>
                 <p>${m.post}</p>
             `;
             container.appendChild(card);
         });
     } catch (e) {
-        container.innerHTML = "Staff data coming soon...";
+        console.error("Staff loading error:", e);
+        container.innerHTML = "<p>स्टाफ डेटा लोड करने में समस्या आ रही है।</p>";
     }
 }
 
-function showStaffDetails(name, post, exp, qual, sub, mobile, email, bio) {
+// टीचर की पूरी जानकारी पॉप-अप में दिखाना
+function showStaffDetails(name, post, exp, qual, sub, mobile, email, bio, photo) {
     const modal = document.getElementById('staffModal');
     if(!modal) return;
     
-    document.getElementById('mName').innerText = name;
-    document.getElementById('mPost').innerText = post;
-    document.getElementById('mExp').innerText = exp;
-    document.getElementById('mQual').innerText = qual;
-    document.getElementById('mSub').innerText = sub;
+    document.getElementById('mName').innerText = name || "N/A";
+    document.getElementById('mPost').innerText = post || "N/A";
+    document.getElementById('mExp').innerText = exp || "N/A";
+    document.getElementById('mQual').innerText = qual || "N/A";
+    document.getElementById('mSub').innerText = sub || "N/A";
     document.getElementById('mMobile').innerText = mobile || "N/A";
     document.getElementById('mEmail').innerText = email || "N/A";
-    document.getElementById('mBio').innerText = bio || "Teaching is the art of assisting discovery.";
+    document.getElementById('mBio').innerText = bio || "विद्यालय परिवार के सम्मानित सदस्य।";
+    
+    // अगर फोटो है तो दिखाओ वरना डिफॉल्ट
+    const modalImg = document.querySelector('#staffModal img');
+    if(modalImg) modalImg.src = photo || 'https://via.placeholder.com/150';
+
     modal.style.display = "block";
 }
 
@@ -94,7 +111,7 @@ function closeModal() {
     document.getElementById('staffModal').style.display = "none";
 }
 
-// --- 6. रिजल्ट चेक करने का फंक्शन (आपका पुराना कोड) ---
+// --- 6. रिजल्ट और आईडी कार्ड (आपका पुराना कोड) ---
 function checkResult() {
     let roll = document.getElementById('rollInput').value;
     let display = document.getElementById('resultDisplay');
@@ -179,10 +196,9 @@ function printIDCard() {
 }
 
 function showQR() {
-    document.getElementById('qrModal').style.display = "block";
+    const qrModal = document.getElementById('qrModal');
+    if(qrModal) qrModal.style.display = "block";
 }
 
-// --- पेज लोड होते ही स्टाफ लोड करें ---
-window.onload = loadStaff;
-
-
+// पेज लोड होते ही स्टाफ की लिस्ट लोड करें
+window.addEventListener('DOMContentLoaded', loadStaff);
