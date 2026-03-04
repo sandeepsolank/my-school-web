@@ -1,145 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Govt. H.S.S. Alot Jageer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>School Master Admin Panel</title>
     <style>
-        /* Distinct color for the admin header */
-        .admin-header { background-color: #d32f2f; color: white; padding: 20px; text-align: center; }
-        .back-link { color: #d32f2f; text-decoration: none; font-weight: bold; background: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-top: 10px; }
+        :root { --primary: #007bff; --success: #28a745; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 20px; }
+        .admin-card { background: white; width: 100%; max-width: 500px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
         
-        .container { max-width: 1000px; margin: auto; padding: 20px; }
-        
-        /* Staff Form Styling */
-        .staff-form-section { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 40px; border-top: 5px solid #d32f2f; }
-        .staff-form-section h3 { color: #d32f2f; margin-top: 0; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-        .form-group input, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-submit { grid-column: 1 / -1; background: #d32f2f; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .btn-submit:hover { background: #b71c1c; }
+        /* Tab Styling */
+        .tabs { display: flex; background: #eee; border-radius: 8px; margin-bottom: 20px; padding: 5px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; cursor: pointer; background: none; font-weight: bold; transition: 0.3s; border-radius: 6px; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f8f8f8; color: #d32f2f; }
+        /* Form Styling */
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 80px; resize: vertical; }
+        
+        button.submit-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .staff-btn { background: var(--primary); }
+        .marks-btn { background: var(--success); }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        #msg { text-align: center; margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
     </style>
 </head>
-
 <body>
 
-    <header class="admin-header">
-        <h1>Principal's Dashboard</h1>
-        <p>Govt. Higher Secondary School, Alot Jageer</p>
-        <a href="/logout" class="back-link">Logout</a>
-    </header>
+<div class="admin-card">
+    <h2>🏫 Master Admin</h2>
 
-    <div class="container">
-        
-        <div class="staff-form-section">
-            <h3>➕ नया स्टाफ टीचर जोड़ें (Add New Staff)</h3>
-            <form id="staffForm">
-                <input type="hidden" name="sheet_type" value="StaffData">
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>पूरा नाम (Full Name)</label>
-                        <input type="text" name="name" placeholder="eg. श्री संदीप जी" required>
-                    </div>
-                    <div class="form-group">
-                        <label>पद (Post)</label>
-                        <input type="text" name="post" placeholder="eg. व्याख्याता" required>
-                    </div>
-                    <div class="form-group">
-                        <label>अनुभव (Experience)</label>
-                        <input type="text" name="exp" placeholder="eg. 10 Years">
-                    </div>
-                    <div class="form-group">
-                        <label>योग्यता (Qualification)</label>
-                        <input type="text" name="qual" placeholder="eg. M.Sc, B.Ed">
-                    </div>
-                    <div class="form-group">
-                        <label>मुख्य विषय (Subject)</label>
-                        <input type="text" name="sub" placeholder="eg. Computer Science">
-                    </div>
-                    <div class="form-group">
-                        <label>मोबाइल नंबर</label>
-                        <input type="text" name="mobile" placeholder="98XXXXXXXX">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>फोटो का लिंक (Photo URL)</label>
-                        <input type="text" name="photo_url" placeholder="Google Drive या Online Photo Link डालें">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>शिक्षक का परिचय (Bio)</label>
-                        <textarea name="bio" rows="2" placeholder="शिक्षक के बारे में कुछ खास शब्द..."></textarea>
-                    </div>
-                </div>
-                
-                <button type="submit" id="submitBtn" class="btn-submit">डाटा सेव करें (Save Staff Data)</button>
-            </form>
-        </div>
-
-        <hr>
-
-        <h2 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; margin-top: 40px;">
-            Total Received Admission Inquiries
-        </h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Student Name</th>
-                    <th>Class</th>
-                    <th>Mobile Number</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                <tr>
-                    <td>{{ student[0] }}</td>
-                    <td>{{ student[1] }}</td>
-                    <td>{{ student[2] }}</td>
-                    <td>{{ student[3] }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="4" style="text-align: center;">No admission inquiries have been submitted yet.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('staffSection', this)">Staff Entry</button>
+        <button class="tab-btn" onclick="showTab('marksSection', this)">Marks Entry</button>
     </div>
 
-    <script>
-        // अपना नया वाला Google Apps Script Web App URL यहाँ पेस्ट करें
-        const scriptURL = 'आपका_नया_DEPLOY_URL_यहाँ_डालें';
-        const form = document.getElementById('staffForm');
+    <div id="staffSection" class="form-section active">
+        <form id="staffForm">
+            <input type="hidden" name="sheet_type" value="StaffData">
+            <input type="text" name="name" placeholder="शिक्षक का नाम (Name)" required>
+            <input type="text" name="post" placeholder="पद (Post - e.g. PGT Math)" required>
+            <input type="text" name="exp" placeholder="अनुभव (Experience)">
+            <input type="text" name="qual" placeholder="योग्यता (Qualification)">
+            <input type="text" name="sub" placeholder="विषय (Subject)">
+            <input type="text" name="photo_url" placeholder="फोटो लिंक (Photo URL)">
+            <input type="text" name="mobile" placeholder="मोबाइल नंबर">
+            <textarea name="bio" placeholder="शिक्षक के बारे में कुछ शब्द..."></textarea>
+            <button type="submit" class="submit-btn staff-btn">Add Teacher to Staff List</button>
+        </form>
+    </div>
 
+    <div id="marksSection" class="form-section">
+        <form id="marksForm">
+            <input type="hidden" name="sheet_type" value="MarksData">
+            <input type="text" name="roll" placeholder="Roll Number" required>
+            <input type="text" name="sname" placeholder="Student Name" required>
+            <input type="text" name="sclass" placeholder="Class (e.g. 10th-A)">
+            <input type="text" name="smarks" placeholder="Marks Obtained (e.g. 450/500)">
+            <select name="sresult">
+                <option value="PASS">PASS</option>
+                <option value="FAIL">FAIL</option>
+                <option value="PENDING">PENDING</option>
+            </select>
+            <button type="submit" class="submit-btn marks-btn">Save Student Marks</button>
+        </form>
+    </div>
+
+    <div id="msg"></div>
+</div>
+
+<script>
+    // --- यहाँ अपना नया Apps Script Web App URL डालें ---
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz8OTDNDTc0gAXXJxZePtU4MVrWl5zC2-91oA8rOIdLv3TgaNht3WL1HrTdhnUf7_by/exec';
+
+    // Tab Switch करने का फंक्शन
+    function showTab(id, btn) {
+        document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
+        document.getElementById('msg').style.display = 'none';
+    }
+
+    // दोनों Forms को Handle करने का कॉमन कोड
+    const forms = [document.getElementById('staffForm'), document.getElementById('marksForm')];
+    
+    forms.forEach(form => {
         form.addEventListener('submit', e => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "सेव हो रहा है... कृपया रुकें";
+            const btn = form.querySelector('button');
+            const msg = document.getElementById('msg');
+
             btn.disabled = true;
+            msg.style.display = 'block';
+            msg.style.background = '#e1f5fe';
+            msg.style.color = '#0288d1';
+            msg.innerText = "Processing... Please wait.";
 
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(response => {
-                alert("बधाई हो! स्टाफ की जानकारी सफलतापूर्वक सुरक्षित कर ली गई है।");
+                msg.style.background = '#e8f5e9';
+                msg.style.color = '#2e7d32';
+                msg.innerText = "✅ Success! Data added to Google Sheet.";
                 form.reset();
-                btn.innerText = "डाटा सेव करें (Save Staff Data)";
                 btn.disabled = false;
             })
             .catch(error => {
-                console.error('Error!', error.message);
-                alert("कुछ गड़बड़ हुई, कृपया दोबारा कोशिश करें।");
+                msg.style.background = '#ffebee';
+                msg.style.color = '#c62828';
+                msg.innerText = "❌ Error! Something went wrong.";
                 btn.disabled = false;
+                console.error('Error!', error.message);
             });
         });
-    </script>
+    });
+</script>
 
 </body>
 </html>
