@@ -1,67 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Dashboard - Govt. H.S.S. Alot Jageer</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <style>
-            /* Distinct color for the admin header */
-            .admin-header {
-                background-color: #d32f2f;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Govt. H.S.S. Alot Jageer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Distinct color for the admin header */
+        .admin-header { background-color: #d32f2f; color: white; padding: 20px; text-align: center; }
+        .back-link { color: #d32f2f; text-decoration: none; font-weight: bold; background: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-top: 10px; }
+        
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        
+        /* Staff Form Styling */
+        .staff-form-section { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 40px; border-top: 5px solid #d32f2f; }
+        .staff-form-section h3 { color: #d32f2f; margin-top: 0; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .form-group input, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .btn-submit { grid-column: 1 / -1; background: #d32f2f; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-submit:hover { background: #b71c1c; }
 
-            .back-link {
-                color: #ffcc00;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 16px;
-                margin-top: 10px;
-                display: inline-block;
-            }
-        </style>
-    </head>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f8f8; color: #d32f2f; }
+    </style>
+</head>
 
-    <body>
+<body>
 
-        <header class="admin-header">
-            <h1>Principal's Dashboard</h1>
-            <p>List of Online Admission Inquiries</p>
-            <a href="/logout" class="back-link"
-                style="background-color: white; color: #d32f2f; padding: 5px 15px; border-radius: 4px;">Logout</a>
-        </header>
+    <header class="admin-header">
+        <h1>Principal's Dashboard</h1>
+        <p>Govt. Higher Secondary School, Alot Jageer</p>
+        <a href="/logout" class="back-link">Logout</a>
+    </header>
 
-        <div class="container">
-            <h2 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px;">Total Received Inquiries
-            </h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Student Name</th>
-                        <th>Class</th>
-                        <th>Mobile Number</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in students %}
-                    <tr>
-                        <td>{{ student[0] }}</td>
-                        <td>{{ student[1] }}</td>
-                        <td>{{ student[2] }}</td>
-                        <td>{{ student[3] }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center;">No admission inquiries have been submitted yet.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="container">
+        
+        <div class="staff-form-section">
+            <h3>➕ नया स्टाफ टीचर जोड़ें (Add New Staff)</h3>
+            <form id="staffForm">
+                <input type="hidden" name="sheet_type" value="StaffData">
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>पूरा नाम (Full Name)</label>
+                        <input type="text" name="name" placeholder="eg. श्री संदीप जी" required>
+                    </div>
+                    <div class="form-group">
+                        <label>पद (Post)</label>
+                        <input type="text" name="post" placeholder="eg. व्याख्याता" required>
+                    </div>
+                    <div class="form-group">
+                        <label>अनुभव (Experience)</label>
+                        <input type="text" name="exp" placeholder="eg. 10 Years">
+                    </div>
+                    <div class="form-group">
+                        <label>योग्यता (Qualification)</label>
+                        <input type="text" name="qual" placeholder="eg. M.Sc, B.Ed">
+                    </div>
+                    <div class="form-group">
+                        <label>मुख्य विषय (Subject)</label>
+                        <input type="text" name="sub" placeholder="eg. Computer Science">
+                    </div>
+                    <div class="form-group">
+                        <label>मोबाइल नंबर</label>
+                        <input type="text" name="mobile" placeholder="98XXXXXXXX">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>फोटो का लिंक (Photo URL)</label>
+                        <input type="text" name="photo_url" placeholder="Google Drive या Online Photo Link डालें">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>शिक्षक का परिचय (Bio)</label>
+                        <textarea name="bio" rows="2" placeholder="शिक्षक के बारे में कुछ खास शब्द..."></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn-submit">डाटा सेव करें (Save Staff Data)</button>
+            </form>
         </div>
 
-    </body>
+        <hr>
 
+        <h2 style="color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; margin-top: 40px;">
+            Total Received Admission Inquiries
+        </h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Mobile Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student[0] }}</td>
+                    <td>{{ student[1] }}</td>
+                    <td>{{ student[2] }}</td>
+                    <td>{{ student[3] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No admission inquiries have been submitted yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // अपना नया वाला Google Apps Script Web App URL यहाँ पेस्ट करें
+        const scriptURL = 'आपका_नया_DEPLOY_URL_यहाँ_डालें';
+        const form = document.getElementById('staffForm');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "सेव हो रहा है... कृपया रुकें";
+            btn.disabled = true;
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                alert("बधाई हो! स्टाफ की जानकारी सफलतापूर्वक सुरक्षित कर ली गई है।");
+                form.reset();
+                btn.innerText = "डाटा सेव करें (Save Staff Data)";
+                btn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert("कुछ गड़बड़ हुई, कृपया दोबारा कोशिश करें।");
+                btn.disabled = false;
+            });
+        });
+    </script>
+
+</body>
 </html>
