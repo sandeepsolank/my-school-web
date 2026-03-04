@@ -14,19 +14,20 @@ async function loadStaff() {
     const container = document.getElementById('staff-list');
     if (!container) return; 
 
-    try {
-        // --- CORS FIX वाला नया FETCH कोड यहाँ है ---
-        const response = await fetch(scriptURL, {
-            method: 'GET',
-            mode: 'cors', 
-            redirect: 'follow'
-        });
-        
-        if (!response.ok) throw new Error('Network response was not ok');
-        
-        const staffData = await response.json();
-        
-        container.innerHTML = ""; // 'Loading' मैसेज हटाएँ
+// अपनी script.js में loadStaff के अंदर की ये लाइनें बदलें
+try {
+    // हमने 'nocache' हटाया है और redirect को 'follow' पर सेट किया है
+    const response = await fetch(scriptURL, {
+        method: 'GET',
+        // यहाँ हमने mode: 'cors' को हटाकर default रहने दिया है क्योंकि Google इसे खुद handle करता है
+        redirect: 'follow' 
+    });
+
+    // Google Apps Script अक्सर redirect करता है, इसलिए response.ok चेक करना ज़रूरी है
+    if (!response.ok) throw new Error('Network status: ' + response.status);
+
+    const staffData = await response.json();
+    console.log("Data Received:", staffData); // यह देखने के लिए कि डेटा आया या नहीं
 
         if (!staffData || staffData.length === 0) {
             container.innerHTML = "<p>अभी कोई स्टाफ डेटा उपलब्ध नहीं है।</p>";
@@ -92,3 +93,4 @@ window.onclick = function(event) {
 
 // --- 6. पेज लोड होते ही लोड शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
+
