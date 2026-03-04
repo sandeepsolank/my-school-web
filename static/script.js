@@ -1,208 +1,86 @@
-// --- 1. Footer Year ---
-// स्पेस हटा दिया गया है, अब यह सही वेरिएबल है
-const yearElement = document.getElementById("currentYear");
-if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-}
+// --- 1. Footer Year Fix (बिना किसी एरर के) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const yearElement = document.getElementById("currentYear");
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+});
 
-// --- 2. Google Apps Script URL ---
-// अपना सबसे नया DEPLOY URL यहाँ सिंगल कोट्स के अंदर डालें
+// --- 2. आपका Google Apps Script URL ---
 const scriptURL = 'https://script.google.com/macros/s/AKfycbynehVNcKWLUk2oOZyg_XHfBTVftRrz2AcjdQZJPcKKdpNJHPKaU6Iopq7VMihmn68S/exec';
 
-// --- 3. Admission Form Submit Handling ---
-if (document.getElementById("admissionForm")) {
-    document.getElementById("admissionForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        let name = document.getElementById("studentName").value;
-        let className = document.getElementById("className").value;
-        let mobile = document.getElementById("mobileNumber").value;
-
-        let formData = new FormData();
-        formData.append('sheet_type', 'Sheet1'); 
-        formData.append('fname', name);
-        formData.append('class', className);
-        formData.append('mobile', mobile);
-
-        fetch(scriptURL, { method: "POST", body: formData })
-            .then(() => {
-                alert("बधाई हो " + name + "! आपका एडमिशन इंक्वायरी फॉर्म जमा हो गया है।");
-                document.getElementById("admissionForm").reset();
-            })
-            .catch((error) => console.error("Error:", error));
-    });
-}
-
-// --- 4. Staff Admin Form (एडमिन पेज के लिए) ---
-if (document.getElementById("staffForm")) {
-    document.getElementById("staffForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.innerText = "सेव हो रहा है...";
-        btn.disabled = true;
-
-        fetch(scriptURL, { method: 'POST', body: new FormData(this) })
-            .then(response => {
-                alert("स्टाफ की जानकारी सफलतापूर्वक सुरक्षित कर ली गई है!");
-                this.reset();
-                btn.innerText = "Save Staff Data";
-                btn.disabled = false;
-            })
-            .catch(error => {
-                alert("Error saving staff data!");
-                btn.disabled = false;
-            });
-    });
-}
-
-// --- 5. Staff Display Logic (Home Page पर डेटा दिखाना) ---
+// --- 3. Staff Data Load करने का फंक्शन ---
 async function loadStaff() {
     const container = document.getElementById('staff-list');
     if (!container) return; 
 
     try {
-        // गूगल शीट से डेटा मांगना
+        // गूगल शीट से डेटा खींचना
         const response = await fetch(scriptURL);
         const staffData = await response.json();
         
-        if (staffData.length === 0) {
-            container.innerHTML = "<p>कोई स्टाफ डेटा नहीं मिला।</p>";
+        container.innerHTML = ""; // 'Loading' मैसेज को हटाना
+
+        if (!staffData || staffData.length === 0) {
+            container.innerHTML = "<p>अभी कोई स्टाफ डेटा उपलब्ध नहीं है।</p>";
             return;
         }
 
-        container.innerHTML = ""; 
-
+        // हर टीचर के लिए एक कार्ड बनाना
         staffData.forEach(m => {
             const card = document.createElement('div');
             card.className = 'staff-card';
-            // कार्ड पर क्लिक करने पर डिटेल्स खुलेगी
-            card.onclick = () => showStaffDetails(m.name, m.post, m.exp, m.qual, m.sub, m.mobile, m.email, m.bio, m.photo);
+            
+            // अगर फोटो न हो तो खाली फोटो (Placeholder) दिखाना
+            const finalPhoto = m.photo || m.photo_url || 'https://via.placeholder.com/150';
+            
+            // कार्ड पर क्लिक करने पर पॉप-अप खुलेगा
+            card.onclick = () => showStaffDetails(m, finalPhoto);
+            
             card.innerHTML = `
-                <img src="${m.photo || 'https://via.placeholder.com/150'}" alt="${m.name}" onerror="this.src='https://via.placeholder.com/150'">
-                <h4>${m.name}</h4>
-                <p>${m.post}</p>
+                <img src="${finalPhoto}" alt="${m.name}" onerror="this.src='https://via.placeholder.com/150'">
+                <h4>${m.name || 'Staff Name'}</h4>
+                <p>${m.post || 'Teacher'}</p>
             `;
             container.appendChild(card);
         });
     } catch (e) {
         console.error("Staff loading error:", e);
-        container.innerHTML = "<p>स्टाफ डेटा लोड करने में समस्या आ रही है।</p>";
+        container.innerHTML = "<p>डेटा लोड नहीं हो पाया। कृपया इंटरनेट चेक करें या पेज रिफ्रेश करें।</p>";
     }
 }
 
-// टीचर की पूरी जानकारी पॉप-अप में दिखाना
-function showStaffDetails(name, post, exp, qual, sub, mobile, email, bio, photo) {
+// --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
+function showStaffDetails(m, photo) {
     const modal = document.getElementById('staffModal');
     if(!modal) return;
     
-    document.getElementById('mName').innerText = name || "N/A";
-    document.getElementById('mPost').innerText = post || "N/A";
-    document.getElementById('mExp').innerText = exp || "N/A";
-    document.getElementById('mQual').innerText = qual || "N/A";
-    document.getElementById('mSub').innerText = sub || "N/A";
-    document.getElementById('mMobile').innerText = mobile || "N/A";
-    document.getElementById('mEmail').innerText = email || "N/A";
-    document.getElementById('mBio').innerText = bio || "विद्यालय परिवार के सम्मानित सदस्य।";
+    document.getElementById('mImg').src = photo;
+    document.getElementById('mName').innerText = m.name || "N/A";
+    document.getElementById('mPost').innerText = m.post || "N/A";
+    document.getElementById('mExp').innerText = m.exp || "जानकारी उपलब्ध नहीं";
+    document.getElementById('mQual').innerText = m.qual || "जानकारी उपलब्ध नहीं";
+    document.getElementById('mSub').innerText = m.sub || "जानकारी उपलब्ध नहीं";
+    document.getElementById('mMobile').innerText = m.mobile || "N/A";
+    document.getElementById('mEmail').innerText = m.email || "N/A";
+    document.getElementById('mBio').innerText = m.bio || "विद्यालय परिवार के सम्मानित सदस्य।";
     
-    // अगर फोटो है तो दिखाओ वरना डिफॉल्ट
-    const modalImg = document.querySelector('#staffModal img');
-    if(modalImg) modalImg.src = photo || 'https://via.placeholder.com/150';
-
     modal.style.display = "block";
 }
 
+// --- 5. पॉप-अप बंद करने का फंक्शन ---
 function closeModal() {
-    document.getElementById('staffModal').style.display = "none";
+    const modal = document.getElementById('staffModal');
+    if(modal) modal.style.display = "none";
 }
 
-// --- 6. रिजल्ट और आईडी कार्ड (आपका पुराना कोड) ---
-function checkResult() {
-    let roll = document.getElementById('rollInput').value;
-    let display = document.getElementById('resultDisplay');
-    let content = document.getElementById('resultContent');
-    
-    if(roll === "101") {
-        display.style.display = "block";
-        content.innerHTML = `
-            <div id="printableMarksheet" style="padding:20px; border:2px solid #003366; background:white; font-family: Arial, sans-serif;">
-                <div style="text-align:center; border-bottom:2px solid #003366; padding-bottom:10px; margin-bottom:15px;">
-                    <h2 style="margin:0; color:#003366;">GOVT. H.S.S. ALOT JAGEER</h2>
-                    <p style="margin:5px 0; font-size:14px;">Annual Examination Marksheet (2025-26)</p>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:14px;">
-                    <div><p><strong>Student Name:</strong> Rahul Patidar</p><p><strong>Roll Number:</strong> 101</p></div>
-                    <div style="text-align:right;"><p><strong>Class:</strong> 12th (Science)</p><p><strong>Status:</strong> <span style="color:green; font-weight:bold;">PASSED</span></p></div>
-                </div>
-                <table style="width:100%; border-collapse: collapse; margin-top:10px; font-size:14px; border:1px solid #ddd;">
-                    <tr style="background:#003366; color:white;"><th style="padding:8px; text-align:left;">Subject</th><th style="padding:8px; text-align:center;">Marks</th></tr>
-                    <tr><td style="padding:8px; border:1px solid #ddd;">Physics</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">85</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #ddd;">Chemistry</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">78</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #ddd;">Mathematics</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">92</td></tr>
-                    <tr style="font-weight:bold; background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">Grand Total / Percentage</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">85%</td></tr>
-                </table>
-                <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:flex-end;">
-                    <div style="font-size:10px; color:gray;">Date: ${new Date().toLocaleDateString()}</div>
-                    <div style="text-align:center; width:150px; border-top:1px solid #333; font-size:12px; font-weight:bold; padding-top:5px;">Principal Signature</div>
-                </div>
-            </div>
-            <div style="margin-top:20px; display:flex; gap:10px;">
-                <button onclick="printMarksheet()" class="submit-btn" style="background:#28a745;">📥 Download Marksheet (PDF)</button>
-                <button onclick="generateIDCard('Rahul Patidar', '12th')" class="submit-btn" style="background:#ffcc00; color:#003366;">🪪 Generate ID Card</button>
-            </div>
-        `;
-    } else {
-        alert("Roll Number not found! Try 101.");
-        display.style.display = "none";
+// खिड़की (Modal) के बाहर क्लिक करने पर बंद हो जाए
+window.onclick = function(event) {
+    const modal = document.getElementById('staffModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
     }
 }
 
-function printMarksheet() {
-    let content = document.getElementById('printableMarksheet').innerHTML;
-    let win = window.open('', '', 'height=800,width=800');
-    win.document.write('<html><head><title>Student Marksheet</title></head><body>' + content + '</body></html>');
-    win.document.close();
-    win.print();
-}
-
-function generateIDCard(name, className) {
-    let modal = document.getElementById('idCardModal');
-    let cardContent = document.getElementById('idCardContent');
-    modal.style.display = "block"; 
-    cardContent.innerHTML = `
-        <div id="printableCard" style="border: 2px solid #003366; padding: 15px; border-radius: 10px; background: white; font-family: Arial, sans-serif;">
-            <div style="background:#003366; color:white; padding:10px; border-radius:5px; text-align:center;">
-                <h4 style="margin:0; font-size:16px;">GOVT. H.S.S. ALOT JAGEER</h4>
-                <p style="margin:2px 0; font-size:11px;">STUDENT IDENTITY CARD</p>
-            </div>
-            <div style="margin:15px 0; text-align:center;">
-                <img src="https://via.placeholder.com/100" style="width:90px; height:90px; border-radius:5px; border:1px solid #003366;">
-            </div>
-            <div style="text-align:left; font-size:14px; line-height:1.8;">
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Class:</strong> ${className}</p>
-                <p><strong>Roll No:</strong> 101</p>
-            </div>
-            <div style="margin-top:20px; text-align:right;"><p style="font-size:10px; font-weight:bold; border-top:1px solid #333; display:inline-block; padding-top:5px;">Principal Signature</p></div>
-        </div>
-        <div style="margin-top: 20px; text-align: center; display: flex; gap: 10px; justify-content: center;">
-            <button onclick="printIDCard()" class="submit-btn" style="background:#28a745;">📥 Print</button>
-            <button onclick="document.getElementById('idCardModal').style.display='none'" class="submit-btn" style="background:#d32f2f;">Close</button>
-        </div>
-    `;
-}
-
-function printIDCard() {
-    let cardHTML = document.getElementById('printableCard').outerHTML;
-    let win = window.open('', '', 'height=700,width=700');
-    win.document.write('<html><body><center>' + cardHTML + '</center></body></html>');
-    win.document.close();
-    win.print();
-}
-
-function showQR() {
-    const qrModal = document.getElementById('qrModal');
-    if(qrModal) qrModal.style.display = "block";
-}
-
-// पेज लोड होते ही स्टाफ की लिस्ट लोड करें
-window.addEventListener('DOMContentLoaded', loadStaff);
-
+// --- 6. पेज लोड होते ही डेटा लोड करना शुरू करें ---
+document.addEventListener('DOMContentLoaded', loadStaff);
