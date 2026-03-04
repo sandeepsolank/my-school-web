@@ -15,26 +15,25 @@ async function loadStaff() {
     if (!container) return; 
 
     try {
-        // गूगल शीट से डेटा खींचना
-        const response = await fetch(scriptURL);
+        // हमने यहाँ URL के साथ रैंडम नंबर जोड़ा है ताकि पुराना डेटा न दिखे (Cache bypass)
+        const response = await fetch(scriptURL + '?nocache=' + new Date().getTime());
+        
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const staffData = await response.json();
         
-        container.innerHTML = ""; // 'Loading' मैसेज को हटाना
+        container.innerHTML = ""; 
 
         if (!staffData || staffData.length === 0) {
             container.innerHTML = "<p>अभी कोई स्टाफ डेटा उपलब्ध नहीं है।</p>";
             return;
         }
 
-        // हर टीचर के लिए एक कार्ड बनाना
         staffData.forEach(m => {
             const card = document.createElement('div');
             card.className = 'staff-card';
-            
-            // अगर फोटो न हो तो खाली फोटो (Placeholder) दिखाना
             const finalPhoto = m.photo || m.photo_url || 'https://via.placeholder.com/150';
             
-            // कार्ड पर क्लिक करने पर पॉप-अप खुलेगा
             card.onclick = () => showStaffDetails(m, finalPhoto);
             
             card.innerHTML = `
@@ -46,10 +45,11 @@ async function loadStaff() {
         });
     } catch (e) {
         console.error("Staff loading error:", e);
-        container.innerHTML = "<p>डेटा लोड नहीं हो पाया। कृपया इंटरनेट चेक करें या पेज रिफ्रेश करें।</p>";
+        // अगर एरर आए तो यहाँ क्लिक करके दोबारा लोड करने का बटन दिखेगा
+        container.innerHTML = `<p>डेटा लोड नहीं हो पाया। <br> 
+        <button onclick="loadStaff()" style="padding:5px 10px; cursor:pointer;">दोबारा कोशिश करें</button></p>`;
     }
 }
-
 // --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
 function showStaffDetails(m, photo) {
     const modal = document.getElementById('staffModal');
@@ -84,3 +84,4 @@ window.onclick = function(event) {
 
 // --- 6. पेज लोड होते ही डेटा लोड करना शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
+
