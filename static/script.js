@@ -27,8 +27,7 @@ async function loadStaff() {
         console.error("Error:", e);
         container.innerHTML = "<p>डेटा लोड करने में समस्या आई।</p>";
     }
-}
-// --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
+}// --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
 function showStaffDetails(m, photo) {
     const modal = document.getElementById('staffModal');
     if(!modal) return;
@@ -64,5 +63,6 @@ window.onclick = function(event) {
 
 // --- 6. पेज लोड होते ही लोड शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
+
 
 
