@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const scriptURL = 'आपका_नया_URL_यहाँ_पेस्ट_करें'; // Manage Deployment वाला लिंक
+const scriptURL = 'https://script.google.com/macros/s/AKfycbx_3Q2q70bDl2XyGS-b15-bmAbNepCcjqHBZ-gfXAUje5NpJx2Uf3FHUeNH7BD-CEKk/exec'; // Manage Deployment वाला लिंक
 
 async function loadStaff() {
     const container = document.getElementById('staff-list');
@@ -63,6 +63,7 @@ window.onclick = function(event) {
 
 // --- 6. पेज लोड होते ही लोड शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
+
 
 
 
