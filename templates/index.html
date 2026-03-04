@@ -1,138 +1,266 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>शासकीय उच्चतर माध्यमिक विद्यालय आलोट</title>
     <style>
-        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        
-        /* Language Translator Style */
-        .translate-box { background: #eee; text-align: right; padding: 5px 20px; border-bottom: 1px solid #ccc; }
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #e67e22;
+            --dark-blue: #002244;
+            --light-bg: #f4f4f4;
+        }
 
-        /* Header Section */
-        header { background-color: #003366; color: white; padding: 25px; text-align: center; border-bottom: 5px solid #e67e22; }
-        header h1 { margin: 0; font-size: 28px; }
-        header p { margin: 5px 0 0; font-style: italic; }
-        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+
+        /* Language Translator */
+        .translate-box {
+            background: #eee;
+            text-align: right;
+            padding: 5px 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 15px;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        header h1 { margin: 0; font-size: clamp(20px, 5vw, 28px); }
+        header p { margin: 10px 0 0; font-style: italic; opacity: 0.9; }
+
         /* Navigation */
-        nav { background-color: #002244; padding: 12px; text-align: center; sticky; top: 0; z-index: 1000; }
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; transition: 0.3s; }
-        nav a:hover { color: #e67e22; border-bottom: 2px solid #e67e22; }
+        nav {
+            background-color: var(--dark-blue);
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-        /* Main Container */
-        .main-container { display: flex; flex-wrap: wrap; padding: 25px; gap: 20px; max-width: 1200px; margin: auto; }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: inline-block;
+        }
 
-        /* Welcome Section */
-        .welcome-section { flex: 2; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .welcome-section h2 { color: #003366; border-left: 5px solid #e67e22; padding-left: 15px; }
-        
-        /* Notice Board (Right Side) */
-        .notice-board { flex: 1; min-width: 300px; background: #fff; border: 2px solid #003366; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .notice-title { background: #003366; color: white; padding: 12px; margin: 0; text-align: center; font-size: 1.2em; }
-        .notice-content { padding: 15px; height: 220px; overflow: hidden; font-size: 14px; line-height: 1.8; }
+        nav a:hover { color: var(--secondary-color); }
 
-        /* Gallery Section */
-        .gallery-container { width: 100%; max-width: 1200px; margin: 20px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
-        .gallery-grid img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: 3px solid #f0f0f0; transition: 0.3s; }
-        .gallery-grid img:hover { transform: translateY(-5px); border-color: #e67e22; }
+        /* Responsive Main Container */
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
 
-        /* Staff Section */
-        .staff-container { width: 100%; background: #003366; color: white; padding: 40px 20px; margin-top: 30px; text-align: center; }
-        .staff-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-top: 30px; }
-        .staff-card { background: white; color: #333; padding: 20px; border-radius: 12px; width: 200px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .staff-card img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 3px solid #003366; object-fit: cover; }
-        .staff-card h4 { margin: 10px 0 5px; color: #003366; font-size: 18px; }
-        .staff-card p { margin: 0; color: #666; font-weight: bold; }
+        .welcome-section {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-        .btn-admission { background-color: #e67e22; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; font-weight: bold; font-size: 18px; transition: 0.3s; }
-        .btn-admission:hover { background-color: #d35400; transform: scale(1.05); }
-        
-        footer { background: #002244; color: white; text-align: center; padding: 20px; margin-top: 0; }
+        .notice-board {
+            flex: 1;
+            min-width: 300px;
+            background: #fff;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .notice-title { background: var(--primary-color); color: white; padding: 12px; margin: 0; text-align: center; }
+        .notice-content { padding: 15px; height: 250px; overflow: hidden; }
+
+        /* Gallery */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery-grid img {
+            width: 100%; height: 200px; object-fit: cover;
+            border-radius: 8px; transition: 0.3s;
+        }
+
+        /* Staff Section (Dynamic) */
+        .staff-section {
+            background: var(--primary-color);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .staff-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .staff-card {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            width: 220px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .staff-card:hover { transform: translateY(-10px); }
+        .staff-card img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color); }
+
+        /* Modal (Popup) Style */
+        .modal {
+            display: none; position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white; margin: 5% auto; padding: 25px;
+            width: 90%; max-width: 500px; border-radius: 15px;
+            position: relative; text-align: center;
+        }
+
+        .close { position: absolute; right: 20px; top: 10px; font-size: 30px; cursor: pointer; }
+
+        .btn-admission {
+            background: var(--secondary-color); color: white;
+            padding: 15px 25px; text-decoration: none; border-radius: 30px;
+            display: inline-block; font-weight: bold; margin-top: 20px;
+        }
+
+        footer { background: var(--dark-blue); color: white; text-align: center; padding: 20px; }
+
+        /* Tablet/Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            nav a { margin: 5px; font-size: 14px; }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="translate-box">
-    <div id="google_translate_element"></div>
-</div>
-
-<header>
-    <h1>शासकीय उच्चतर माध्यमिक विद्यालय, आलोट (रतलाम)</h1>
-    <p>विद्या ददाति विनयं - शिक्षा से ही सर्वांगीण विकास</p>
-</header>
-
-<nav>
-    <a href="/">होम (Home)</a>
-    <a href="/admission">ऑनलाइन प्रवेश (Admission)</a>
-    <a href="#gallery">गैलरी (Gallery)</a>
-    <a href="#staff">स्टाफ (Staff)</a>
-</nav>
-
-<div class="main-container">
-    <div class="welcome-section">
-        <h2>विद्यालय में आपका स्वागत है</h2>
-        <p>हमारा विद्यालय आलोट क्षेत्र में शिक्षा की मशाल जला रहा है। यहाँ छात्र-छात्राओं के लिए उच्च गुणवत्ता वाली शिक्षा, खेलकूद और सांस्कृतिक गतिविधियों का संगम है।</p>
-        <p><b>सुविधाएँ:</b> स्मार्ट क्लासरूम, कंप्यूटर लैब, समृद्ध पुस्तकालय और अनुभवी शिक्षक वृन्द।</p>
-        <a href="/admission" class="btn-admission">प्रवेश हेतु यहाँ क्लिक करें (2026-27)</a>
+    <div class="translate-box">
+        <div id="google_translate_element"></div>
     </div>
 
-    <div class="notice-board">
-        <h3 class="notice-title">सूचना पटल (Notice Board)</h3>
-        <div class="notice-content">
-            <marquee direction="up" scrollamount="2" onmouseover="this.stop();" onmouseout="this.start();">
-                <p>🚩 सत्र 2026-27 के लिए ऑनलाइन प्रवेश प्रारंभ हो चुके हैं।</p>
-                <p>📅 दिनांक 15 मार्च को वार्षिक परीक्षा परिणाम घोषित होगा।</p>
-                <p>📋 कक्षा 10वीं और 12वीं के परीक्षार्थी एडमिट कार्ड ले लें।</p>
-                <p>⚽ वार्षिक खेलकूद प्रतियोगिता सोमवार से शुरू होगी।</p>
-                <p>📞 किसी भी सहायता के लिए कार्यालय में संपर्क करें।</p>
-            </marquee>
+    <header>
+        <h1>शासकीय उच्चतर माध्यमिक विद्यालय, आलोट (रतलाम)</h1>
+        <p>विद्या ददाति विनयं - शिक्षा से ही सर्वांगीण विकास</p>
+    </header>
+
+    <nav>
+        <a href="/">होम (Home)</a>
+        <a href="/admission">ऑनलाइन प्रवेश (Admission)</a>
+        <a href="#gallery">गैलरी (Gallery)</a>
+        <a href="#staff">स्टाफ (Staff)</a>
+    </nav>
+
+    <div class="main-container">
+        <div class="welcome-section">
+            <h2>विद्यालय में आपका स्वागत है</h2>
+            <p>हमारा विद्यालय आलोट क्षेत्र में शिक्षा की मशाल जला रहा है। यहाँ छात्र-छात्राओं के लिए उच्च गुणवत्ता वाली शिक्षा और अनुशासन का संगम है।</p>
+            <a href="/admission" class="btn-admission">प्रवेश हेतु यहाँ क्लिक करें (2026-27)</a>
+        </div>
+
+        <div class="notice-board">
+            <h3 class="notice-title">सूचना पटल (Notice Board)</h3>
+            <div class="notice-content">
+                <marquee direction="up" scrollamount="2" onmouseover="this.stop();" onmouseout="this.start();">
+                    <p>🚩 सत्र 2026-27 के लिए ऑनलाइन प्रवेश प्रारंभ।</p>
+                    <p>📅 15 मार्च को वार्षिक परीक्षा परिणाम घोषित होगा।</p>
+                    <p>📋 कक्षा 10वीं/12वीं के एडमिट कार्ड कार्यालय से प्राप्त करें।</p>
+                </marquee>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="gallery-container" id="gallery">
-    <h2 style="color: #003366; border-bottom: 3px solid #e67e22; display: inline-block; padding-bottom: 5px;">विद्यालय की झलकियाँ (Gallery)</h2>
-    <div class="gallery-grid">
-        <img src="https://via.placeholder.com/400x300?text=School+Building" alt="School">
-        <img src="https://via.placeholder.com/400x300?text=Computer+Lab" alt="Lab">
-        <img src="https://via.placeholder.com/400x300?text=Classroom" alt="Class">
-        <img src="https://via.placeholder.com/400x300?text=Sports+Day" alt="Sports">
-    </div>
-</div>
-
-<div class="staff-container" id="staff">
-    <h2>हमारा समर्पित स्टाफ (Our Dedicated Staff)</h2>
-    <div class="staff-grid">
-        <div class="staff-card">
-            <img src="https://via.placeholder.com/150?text=Principal" alt="Principal">
-            <h4>श्री रमेश जी</h4>
-            <p>प्राचार्य (Principal)</p>
-        </div>
-        <div class="staff-card">
-            <img src="https://via.placeholder.com/150?text=Teacher" alt="Sandeep Ji">
-            <h4>श्री संदीप जी</h4>
-            <p>व्याख्याता (IT/CS)</p>
-        </div>
-        <div class="staff-card">
-            <img src="https://via.placeholder.com/150?text=Teacher" alt="Staff">
-            <h4>श्रीमती वर्मा</h4>
-            <p>वरिष्ठ शिक्षक</p>
+    <div class="gallery-container" id="gallery">
+        <h2 style="color: var(--primary-color);">विद्यालय की झलकियाँ</h2>
+        <div class="gallery-grid">
+            <img src="https://via.placeholder.com/400x300?text=School+Building" alt="School">
+            <img src="https://via.placeholder.com/400x300?text=Computer+Lab" alt="Lab">
+            <img src="https://via.placeholder.com/400x300?text=Classroom" alt="Class">
+            <img src="https://via.placeholder.com/400x300?text=Sports+Day" alt="Sports">
         </div>
     </div>
-</div>
 
-<footer>
-    <p>&copy; 2026 शासकीय उच्चतर माध्यमिक विद्यालय आलोट | सर्वाधिकार सुरक्षित</p>
-</footer>
+    <section class="staff-section" id="staff">
+        <h2>हमारा समर्पित स्टाफ (Our Staff)</h2>
+        <div class="staff-grid" id="staff-list">
+            <p>स्टाफ की जानकारी लोड हो रही है...</p>
+        </div>
+    </section>
 
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'hi', includedLanguages: 'en,hi'}, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="staffModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="mImg" src="" style="width:120px; height:120px; border-radius:50%; margin-bottom:15px;">
+            <h2 id="mName" style="color:var(--primary-color); margin:5px 0;"></h2>
+            <p><strong id="mPost"></strong></p>
+            <hr>
+            <div style="text-align:left; font-size: 14px; padding: 0 10px;">
+                <p><strong>अनुभव:</strong> <span id="mExp"></span></p>
+                <p><strong>योग्यता:</strong> <span id="mQual"></span></p>
+                <p><strong>विषय:</strong> <span id="mSub"></span></p>
+                <p><strong>संपर्क:</strong> <span id="mMobile"></span></p>
+                <p><strong>ईमेल:</strong> <span id="mEmail"></span></p>
+                <p><strong>परिचय:</strong> <br><span id="mBio"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> शासकीय उच्चतर माध्यमिक विद्यालय आलोट | सर्वाधिकार सुरक्षित</p>
+    </footer>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'hi', includedLanguages: 'en,hi' }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <script src="script.js"></script>
 
 </body>
 </html>
