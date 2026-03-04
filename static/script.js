@@ -6,57 +6,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- 2. आपका Google Apps Script URL ---
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx_3Q2q70bDl2XyGS-b15-bmAbNepCcjqHBZ-gfXAUje5NpJx2Uf3FHUeNH7BD-CEKk/exec';
+const scriptURL = 'आपका_नया_URL_यहाँ_पेस्ट_करें'; // Manage Deployment वाला लिंक
 
-// --- 3. Staff Data Load करने का फंक्शन ---
 async function loadStaff() {
     const container = document.getElementById('staff-list');
-    if (!container) return; 
+    try {
+        const response = await fetch(scriptURL);
+        const staffData = await response.json();
+        
+        console.log("Data from Google:", staffData); // यह F12 दबाने पर दिखेगा
 
-// अपनी script.js में loadStaff के अंदर की ये लाइनें बदलें
-try {
-    // हमने 'nocache' हटाया है और redirect को 'follow' पर सेट किया है
-    const response = await fetch(scriptURL, {
-        method: 'GET',
-        // यहाँ हमने mode: 'cors' को हटाकर default रहने दिया है क्योंकि Google इसे खुद handle करता है
-        redirect: 'follow' 
-    });
-
-    // Google Apps Script अक्सर redirect करता है, इसलिए response.ok चेक करना ज़रूरी है
-    if (!response.ok) throw new Error('Network status: ' + response.status);
-
-    const staffData = await response.json();
-    console.log("Data Received:", staffData); // यह देखने के लिए कि डेटा आया या नहीं
-
+        container.innerHTML = ""; 
         if (!staffData || staffData.length === 0) {
-            container.innerHTML = "<p>अभी कोई स्टाफ डेटा उपलब्ध नहीं है।</p>";
+            container.innerHTML = "<p>शीट में कोई डेटा नहीं मिला।</p>";
             return;
         }
 
-        staffData.forEach(m => {
-            const card = document.createElement('div');
-            card.className = 'staff-card';
-            
-            // फोटो चेक करना
-            const finalPhoto = m.photo || m.photo_url || 'https://via.placeholder.com/150';
-            
-            card.onclick = () => showStaffDetails(m, finalPhoto);
-            
-            card.innerHTML = `
-                <img src="${finalPhoto}" alt="${m.name}" onerror="this.src='https://via.placeholder.com/150'">
-                <h4>${m.name || 'Staff Name'}</h4>
-                <p>${m.post || 'Teacher'}</p>
-            `;
-            container.appendChild(card);
-        });
+        // ... बाकी कोड वही रहेगा
     } catch (e) {
-        console.error("Staff loading error:", e);
-        container.innerHTML = `<p>डेटा लोड नहीं हो पाया। <br> 
-        <button onclick="loadStaff()" style="margin-top:10px; padding:5px 10px; cursor:pointer;">दोबारा कोशिश करें</button></p>`;
+        console.error("Error:", e);
+        container.innerHTML = "<p>डेटा लोड करने में समस्या आई।</p>";
     }
 }
-
 // --- 4. Staff Modal (पॉप-अप) में जानकारी भरना ---
 function showStaffDetails(m, photo) {
     const modal = document.getElementById('staffModal');
@@ -93,4 +64,5 @@ window.onclick = function(event) {
 
 // --- 6. पेज लोड होते ही लोड शुरू करें ---
 document.addEventListener('DOMContentLoaded', loadStaff);
+
 
