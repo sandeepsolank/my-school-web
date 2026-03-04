@@ -1,5 +1,5 @@
 // --- 1. आपका नया Google Apps Script URL (School Master Data वाली शीट का) ---
-const scriptURL = 'यहाँ_नया_URL_पेस्ट_करें'; 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz8OTDNDTc0gAXXJxZePtU4MVrWl5zC2-91oA8rOIdLv3TgaNht3WL1HrTdhnUf7_by/exec'; 
 
 // --- 2. Staff Data Load करने का फंक्शन ---
 async function loadStaff() {
@@ -7,8 +7,8 @@ async function loadStaff() {
     if (!container) return; 
 
     try {
-        // यहाँ हमने '?type=StaffData' जोड़ा है ताकि गूगल को पता चले कौन सी शीट चाहिए
-        const response = await fetch(scriptURL + '?type=StaffData', {
+        // Staff लोड करने के लिए URL के पीछे ?type=StaffData जोड़ना होगा
+        const response = await fetch(scriptURL + "?type=StaffData"), {
             method: 'GET',
             redirect: 'follow'
         });
@@ -56,3 +56,4 @@ async function loadMarks() {
 }
 
 document.addEventListener('DOMContentLoaded', loadStaff);
+
