@@ -2,7 +2,7 @@
 document.getElementById("currentYear").textContent = new Date().getFullYear();
 
 // --- 2. Google Apps Script URL (अपना नया URL यहाँ डालें) ---
-const scriptURL = 'आपका_नया_DEPLOY_URL_यहाँ_डालें';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_8NaOorUset4lVrLQNGut0Os1-B9VOqtpm_O0IhEj1ASW98Uc4WeMzWpHItrbolKv/exec';
 
 // --- 3. Admission Form Submit Handling ---
 if (document.getElementById("admissionForm")) {
@@ -184,3 +184,4 @@ function showQR() {
 
 // --- पेज लोड होते ही स्टाफ लोड करें ---
 window.onload = loadStaff;
+
